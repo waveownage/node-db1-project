@@ -27,5 +27,21 @@ router.get("/:id", async (req, res, next) => {
 	}
 })
 
+router.post("/", async (req, res, next) => {
+	try {
+		const payload = {
+			name: req.body.name,
+			budget: req.body.budget,
+		}
+		const [accountID] = await db.insert(payload).into("accounts")
+
+		const account = await db.first("*").from("accounts").where("id", accountID)
+
+		res.status(201).json(account)
+	} catch (err) {
+		next(err)
+	}
+})
+
 
 module.exports = router
