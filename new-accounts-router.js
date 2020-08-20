@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const accounts = await db.select("*").from("accounts");
+    const accounts = await db.select("*").from("accounts").limit(5);
 
     res.json(accounts);
   } catch (err) {
