@@ -15,7 +15,9 @@ router.get("/", async (req, res, next) => {
     }
   });
 
-  router.get("/:id", async (req, res, next) => {
+//GET account by ID
+
+router.get("/:id", async (req, res, next) => {
     try {
       const [account] = await db
         .select("*")
@@ -28,6 +30,26 @@ router.get("/", async (req, res, next) => {
       next(err);
     }
   });
+
+//Add account
+
+router.post("/", async (req, res, next) => {
+    try {
+        const [id] = await db.insert({
+            name: req.body.name,
+            budget: req.body.budget,
+        })
+        .into("accounts")
+
+        const account = await db("accounts")
+        .where("id", id)
+        .first()
+
+        res.status(201).json(account)
+    } catch(err) {
+        next(err)
+    }
+})
 
 module.exports = router;
 
