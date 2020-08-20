@@ -51,5 +51,27 @@ router.post("/", async (req, res, next) => {
     }
 })
 
+//Update Account
+
+router.put("/:id", async (req, res, next) => {
+    try {
+      const payload = {
+        name: req.body.name,
+        budget: req.body.budget
+      };
+      await db("accounts")
+        .update(payload)
+        .where("id", req.params.id);
+      const account = await db
+        .first("*")
+        .from("accounts")
+        .where("id", req.params.id);
+  
+      res.json(account);
+    } catch (err) {
+      next(err);
+    }
+  });
+
 module.exports = router;
 
